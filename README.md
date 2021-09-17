@@ -530,3 +530,17 @@ db.animals.update({
         }
     }
 })
+```
+
+## Update an existing sub-document in an array
+Change the vet's name from 'Dr Tan' to 'Dr Su':
+
+```
+db.animals.update({
+    'checkups.id':ObjectId("61444ee15786cff39cf56459")
+},{
+    '$set':{
+        'checkups.$.name':'Dr Su'
+    }
+})
+```
