@@ -240,3 +240,43 @@ db.listingsAndReviews.find({
     'name':1
 })
 ```
+
+## Logical operators
+We want to find listings that are either in Brazil or Canada.
+
+```
+db.listingsAndReviews.find({
+    "$or":[
+        {
+            'address.country':"Brazil"
+        },
+        {
+            'address.country':"Canada"
+        }
+    ]
+}, {
+    'name':1,
+    'address.country':1
+})
+```
+Find all the listings that are from Brazil and has at least 2 bedrooms or listings that are from Canada.
+
+```
+db.listingsAndReviews.find({
+    "$or":[
+        {
+            "address.country":"Brazil",
+            "bedrooms":{
+                "$gte":3
+            }
+        },
+        {
+            "address.counrty":"Canada",
+        }
+    ]
+},{
+    'name':1,
+    'address.country':1,
+    'bedrooms':1
+})
+```
