@@ -59,3 +59,5 @@ db.animals.update({
 db.animals.remove({
     '_id':ObjectId("ID of Jorden")
 })
+
+db.animals.removeMany({})
