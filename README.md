@@ -109,4 +109,134 @@ db.listingsAndReviews.find({
     "beds":1,
     "bedrooms":2,
     "address.country":1
+}).pretty()
+```
+
+## Finding by inequality
+
+We have to use the special operators `$gt` for greater than
+
+```
+db.listingsAndReviews.find({
+    'beds': {
+        '$gte': 3
+    }
+},{
+    'name':1,
+    'beds':1
 })
+```
+* `$lt` - lesser than
+* `$lte` - lesser than or equal
+* `$gt` - greater than
+* `$gte` - greater than equal
+* `$ne` - not equal
+
+Find all the listings that have between 3 to 6 beds:
+```
+db.listingsAndReviews.find({
+    'beds':{
+        '$gte':3,
+        '$lte':6
+    }
+},{
+    'name':1,
+    'beds':1
+})
+```
+
+Find all listings that have between 3 to 6 beds and are in Brazil:
+
+```
+db.listingsAndReviews.find({
+    'beds':{
+        '$gte':3,
+        '$lte':6
+    },
+    'address.country':'Brazil'
+},{
+    'beds':1,
+    'bedrooms':1,
+    'address.country':1
+}).pretty()
+```
+
+## Filtering by a key that is an array
+
+If we are only interested if an array contains a certain value:
+
+```
+db.listingsAndReviews.find({
+    'amenities':'Oven'
+},{
+    'name':1,
+    'amenities':1
+}).pretty()
+```
+
+We use `$in` if we want match just one of multiple values in an array:
+
+```
+db.listingsAndReviews.find({
+    'amenities':{
+        '$in':['Oven', 'Microwave', 'Stove']
+    }
+},{
+    'name':1,
+    'amenities':1
+}).pretty()
+```
+
+Find all the listings that have *all* of the following: Oven, Stove, Microwave, Dishes and silverware:
+
+```
+db.listingsAndReviews.find({
+    'amenities':{
+        '$all':['Oven', 'Stove', 'Microwave', 'Dishes and silverware']
+    }
+},{
+    'amenities':1
+}).pretty()
+```
+
+## Select by ObjectID
+
+**The examples below uses the `sample_mflix` database**
+
+```
+use sample_mflix;
+```
+
+To find a document by its ObjectId:
+```
+db.movies.find({
+    '_id':ObjectId("573a1390f29313caabcd5b9a")
+}).pretty()
+```
+
+## Search by regular expressions
+We are using back the `sample_airbnb` database for the examples below.
+
+* Find all the listings that the word `spacious` in the name. To do so, we use the `$regex` operator
+```
+db.listingsAndReviews.find({
+    'name': {
+        '$regex':'spacious',
+        '$options':'i'
+    }
+},{
+    'name':1
+})
+```
+* Find all the listings where the name includes the phrae 'apartment for x', where x is a number between 1 to 9.
+
+```
+db.listingsAndReviews.find({
+    "name":{
+        '$regex':"apartment for \[1-9]",
+        '$options':'i'
+    }
+},{
+    'name':1
+})
+```
