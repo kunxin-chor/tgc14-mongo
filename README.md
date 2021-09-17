@@ -57,7 +57,7 @@ db.listingsAndReviews.find({},{
     'address.country':1,
     'beds':1
 }).pretty()
-
+```
 ## Limit
 Show only the first five results:
 
@@ -94,4 +94,19 @@ db.listingsAndReviews.find({
     'name':1,
     'beds':1,
     'bedrooms':1
+})
+```
+
+Query by a key in embededd document
+
+```
+db.listingsAndReviews.find({
+    "beds":2,
+    "bedrooms":2,
+    "address.country":"Brazil"
+},{
+    "name":1,
+    "beds":1,
+    "bedrooms":2,
+    "address.country":1
 })
