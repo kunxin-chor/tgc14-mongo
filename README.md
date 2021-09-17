@@ -372,3 +372,161 @@ db.animals.insert({
     "date_enrolled":ISODate("2021-02-28")
 });
 ```
+# Inserting many records
+1. `use` the database that we want to create
+```
+use fake_school
+```
+2. Insert the records using `insertMany`
+
+```
+db.students.insertMany([
+    {
+        "name":"Jane Doe",
+        "age":13,
+        "subjects":["Defense against the Dark Arts", "Charms", "History of Magic"],
+        "date_enrolled": ISODate("2016-05-13")
+    },
+    {
+        "name":"James Verses",
+        "age":14,
+        "subjects":["Transfiguration", "Alchemy"],
+        "date_enrolled": ISODate("2015-06-15")
+    },
+    {
+        "name":"Jonathan Goh",
+        "age":12,
+        "subjects":["Divination", "Study of Ancient Runes"],
+        "date_enrolled":ISODate("2017-04-16")
+    }
+])
+```
+## Updating existing document
+
+1. Select the document(s)
+
+2. Specify the changes
+
+### Find a document by its _id and update it
+
+The `update` function has two parametes:
+* first argument: the selection criteria
+* second argument: what to update
+
+Technique 1: Update a specific field (only or more fields only)
+```
+db.animals.update({
+    "_id":ObjectId("61443eee5786cff39cf56450")
+},{
+    "$set":{
+        "age":1.5
+    }
+})
+```
+
+Set "Timmy" as adopted:
+```
+db.animals.update({
+    "_id":ObjectId("61443eee5786cff39cf56450")
+},{
+    "$set":{
+        "status":"adopted"
+    }
+})
+```
+
+Technique 2: update by providing a new document
+```
+db.animals.update({
+    "_id":ObjectId("61443eee5786cff39cf56450")
+},{
+    "name":"Timmy",
+    "age": 1.5,
+    "breed":"German Shepherd",
+    "type":"Dog"
+})
+```
+
+
+
+## Delete
+```
+db.animals.delete({
+    '_id':ObjectId('61443f5f5786cff39cf56451')
+})
+```
+Delete `Teacup` from the system:
+
+## Embedded collections/documents
+
+```
+db.animals.insert({
+    "name":"Frenzy",
+    "age":1,
+    "breed":"Wild Cat",
+    "type":"Cat",
+    "checkups":[
+        {
+            "id":ObjectId(),
+            "name":"Dr. Chua",
+            "diagnosis":"Heartworms",
+            "treatment":"Steriods"
+        }
+    ]
+})
+
+db.animals.insert({
+    "name":"Cookie",
+    "age":3,
+    "breed":"Lab Retriever",
+    "type":"Dog"
+})
+```
+
+## Add a new object (i.e, a sub-document) to an array within a document
+
+Add a new checkup to Cookie the dog:
+```
+db.animals.update({
+    "_id":ObjectId("61444e765786cff39cf56458")
+},{
+    "$push":{
+        "checkups":{
+            "id":ObjectId(),
+            "name":"Dr. Tan",
+            "diagnosis":"Diabetes",
+            "treatment":"Medication"
+        }
+    }
+})
+```
+
+Add a new checkup to Frenzy the cat:
+```
+db.animals.update({
+    "_id":ObjectId("61444dfd5786cff39cf56457")
+},{
+    "$push":{
+        "checkups":{
+            "id":ObjectId(),
+            "name":"Dr Tan",
+            "diagnosis":"Stomach upset",
+            "treatment":"Dewormer"
+        }
+    }
+})
+```
+
+## Remove an element from an array
+We use `$pull`
+
+```
+db.animals.update({
+    "_id":ObjectId("61444dfd5786cff39cf56457")
+}, {
+    '$pull':{
+        'checkups':{
+            'id':ObjectId("61444f7f5786cff39cf5645a")
+        }
+    }
+})
