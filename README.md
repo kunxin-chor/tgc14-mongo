@@ -271,12 +271,41 @@ db.listingsAndReviews.find({
             }
         },
         {
-            "address.counrty":"Canada",
+            "address.country":"Canada",
         }
     ]
 },{
     'name':1,
     'address.country':1,
     'bedrooms':1
+})
+```
+
+Use `$not` to do the inverse. Example: Show all the listings that are not from Brazil.
+
+```
+db.reviewAndListings.find({
+   'address.country':{
+       '$not':{
+           '$in':['Brazil', 'Canada']
+       }
+   }
+},{
+    'name':1,
+    'address.country':1
+})
+```
+
+## Find by dates
+
+Dates in Mongo are stored using `ISODate` objects.  The parameter used to create a `ISODate` object is the date in the `YYYY-MM-DD` format.
+```
+db.listingsAndReviews.find({
+    'first_review':{
+        '$gte':ISODate('2018-01-01')
+    }
+},{
+    'name':1,
+    'first_review':1
 })
 ```
